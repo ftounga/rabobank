@@ -4,6 +4,8 @@ package com.example.rabobank.controller;
 import com.example.rabobank.config.Swagger;
 import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
+import com.example.rabobank.exception.BusinessErrorCode;
+import com.example.rabobank.exception.BusinessException;
 import com.example.rabobank.service.RecordService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -11,12 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -46,5 +47,12 @@ public class RecordController {
         return ResponseEntity.ok(recordService.createRecord(recordRequest));
     }
 
+    @Swagger
+    @ApiOperation("import records ")
+    @PostMapping("/records")
+    public void importRecords(@RequestParam("file") MultipartFile recordFile) throws IOException {
+
+        recordService.importRecords(recordFile);
+    }
 
 }

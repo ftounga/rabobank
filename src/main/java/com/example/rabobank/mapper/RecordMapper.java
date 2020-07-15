@@ -4,6 +4,8 @@ import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
 import com.example.rabobank.entity.RecordEntity;
 
+import java.time.LocalDate;
+
 public class RecordMapper {
 
     public static RecordEntity buildEntityFromRecordRequest(RecordRequest recordRequest){
@@ -14,6 +16,7 @@ public class RecordMapper {
         entity.setStartBalance(recordRequest.getStartBalance());
         entity.setMutation(recordRequest.getMutation());
         entity.setTransactionReference(recordRequest.getTransactionReference());
+        entity.setDateCreation(LocalDate.now());
         return entity;
     }
 

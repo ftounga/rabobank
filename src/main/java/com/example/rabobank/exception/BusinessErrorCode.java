@@ -2,7 +2,11 @@ package com.example.rabobank.exception;
 
 public enum BusinessErrorCode {
 
-    REFERENCE_TRANSACTION_ALREADY_EXIST("error.reference.transaction.already.exist", 400);
+    REFERENCE_TRANSACTION_ALREADY_EXIST("error.reference.transaction.already.exist", 400),
+    RECORD_FORMAT_FILE_NAME_INCORRECT("error.record.file.name.format", 400),
+    RECORD_CSV_FILE_INCORRECT("error.record.csv.file", 400),
+    RECORD_END_BALANCE_NOT_CONSISTENT("error.record.end.balance.not.consistent", 400),
+    RECORD_EXTENSION_FILE_NAME_INCORRECT("error.record.file.name.extension", 400);
     private String errorCode;
     private Integer status;
 

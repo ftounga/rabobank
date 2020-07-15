@@ -29,6 +29,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDto errorDto = new ErrorDto();
         errorDto.setErrorCode(errorCode);
         errorDto.setMessage(errorMessage);
+        errorDto.setErrorValue(ex.getErrorValue());
+
         return errorDto;
     }
 }
