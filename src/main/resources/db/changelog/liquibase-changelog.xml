@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="Franck" id="1">
+        <createTable tableName="record">
+            <column name="id" type="INTEGER"
+                    autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(300)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="account_number" type="VARCHAR(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="public_id" type="VARCHAR(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_reference" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_balance" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_balance" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mutation" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_creation" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Franck" id="2">
+        <addPrimaryKey tableName="record"
+                       constraintName="id_pk" columnNames="id"/>
+    </changeSet>
+
+    <changeSet  author="Franck"  id="3">
+        <addUniqueConstraint  columnNames="transaction_reference"
+                              constraintName="const_ref"
+                              tableName="record"/>
+    </changeSet>
+
+    <changeSet author="Franck" id="4">
+        <sqlFile path="init-db.sql"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>
+
