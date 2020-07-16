@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  rabobank-db:
+    image: rabobank-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: francky
+      POSTGRES_DB: rabobank
+    build:
+      context: postgresql
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "16432:5432"
+    networks:
+      - backend
+
+  rabobank-api:
+    build:
+      context: api
+    image: rabobank-api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://rabobank-db:5432/rabobank
+      DB_USERNAME: rabo_user
+      DB_PASSWORD: francky
+    depends_on:
+      - rabobank-db
+    networks:
+      - backend
+      
+volumes:
+  postgres:
+
+networks:
+  backend:
+    driver: "bridge"
