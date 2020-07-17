@@ -56,7 +56,7 @@ public class RecordServiceImpl implements RecordService {
         Stream<RecordRequest> recordRequestStream = null;
         if(fileExtension ==  FileExtension.CSV){
             recordRequestStream = recordProcessor.processRecordCsvFile(recordStream);
-        } else if(fileExtension ==  FileExtension.CSV){
+        } else if(fileExtension ==  FileExtension.XML){
             recordRequestStream = recordProcessor.processRecordXmlFile(recordStream);
         }
         List<RecordEntity> recordsEntity = recordRequestStream

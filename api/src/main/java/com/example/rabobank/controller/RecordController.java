@@ -52,6 +52,7 @@ public class RecordController {
     @PostMapping("/records")
     public void importRecords(@RequestParam("file") MultipartFile recordFile) throws IOException {
 
+        logger.info("****** import record file");
         recordService.importRecords(recordFile);
     }
 

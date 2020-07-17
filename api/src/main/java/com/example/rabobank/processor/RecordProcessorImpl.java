@@ -2,6 +2,7 @@ package com.example.rabobank.processor;
 
 import com.example.rabobank.domain.request.RecordRequest;
 import com.example.rabobank.validator.RecordFileValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -15,6 +16,9 @@ import java.util.stream.Stream;
 @Component
 public class RecordProcessorImpl implements RecordProcessor {
 
+    @Autowired
+    private FileParserRecordRequest fileParserRecordRequest;
+
     @Override
     public Stream<RecordRequest> processRecordXmlFile(InputStream inputStream){
         return null;
@@ -26,11 +30,9 @@ public class RecordProcessorImpl implements RecordProcessor {
                 new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                         .lines()
                         .skip(1)
-                        .map(FileParser::parseLine)
+                        .map(fileParserRecordRequest::parseLine)
                 .collect(Collectors.toList());
         RecordFileValidator.validateNoDuplicatetransactionReference(recordRequests);
         return recordRequests.stream();
     }
-
-
 }
