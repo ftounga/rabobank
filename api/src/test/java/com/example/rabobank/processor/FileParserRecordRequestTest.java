@@ -22,7 +22,7 @@ class FileParserRecordRequestTest {
 
         RecordRequest recordRequest = fileParserRecordRequest.parseLine(input);
         Assertions.assertEquals("Tickets for Jan King", recordRequest.getDescription());
-        Assertions.assertEquals(BigInteger.valueOf(181631), recordRequest.getTransactionReference());
+        Assertions.assertEquals(BigInteger.valueOf(181631), recordRequest.getReference());
         Assertions.assertEquals("NL27SNSB0917829871", recordRequest.getAccountNumber());
     }
 

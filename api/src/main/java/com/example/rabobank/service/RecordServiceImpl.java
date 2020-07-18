@@ -57,7 +57,7 @@ public class RecordServiceImpl implements RecordService {
         if(fileExtension ==  FileExtension.CSV){
             recordRequestStream = recordProcessor.processRecordCsvFile(recordStream);
         } else if(fileExtension ==  FileExtension.XML){
-            recordRequestStream = recordProcessor.processRecordXmlFile(recordStream);
+            recordRequestStream = recordProcessor.processRecordXmlFile(recordFile);
         }
         List<RecordEntity> recordsEntity = recordRequestStream
                 .map(RecordMapper::buildEntityFromRecordRequest)

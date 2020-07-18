@@ -15,7 +15,7 @@ public class RecordMapper {
         entity.setEndBalance(recordRequest.getEndBalance());
         entity.setStartBalance(recordRequest.getStartBalance());
         entity.setMutation(recordRequest.getMutation());
-        entity.setTransactionReference(recordRequest.getTransactionReference());
+        entity.setTransactionReference(recordRequest.getReference());
         entity.setDateCreation(LocalDate.now());
         return entity;
     }

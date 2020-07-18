@@ -5,13 +5,11 @@ import com.example.rabobank.exception.BusinessErrorCode;
 import com.example.rabobank.exception.BusinessException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class RecordFileValidator {
 
@@ -29,7 +27,7 @@ public class RecordFileValidator {
     public static void validateNoDuplicatetransactionReference(List<RecordRequest> recordRequests){
         Set<BigInteger> items = new HashSet<>();
          recordRequests.stream()
-                .map(RecordRequest::getTransactionReference)
+                .map(RecordRequest::getReference)
                 .forEach(reference -> {
                     if (items.contains(reference)){
                         throw new BusinessException(BusinessErrorCode.REFERENCE_TRANSACTION_ALREADY_EXIST, reference.toString());

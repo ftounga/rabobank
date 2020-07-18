@@ -35,7 +35,7 @@ public class RecordServiceTest {
         recordRequest.setStartBalance(new BigDecimal(22.8));
         recordRequest.setAccountNumber("tfry-reez-rty");
         recordRequest.setDescription("description");
-        recordRequest.setTransactionReference(BigInteger.valueOf(10));
+        recordRequest.setReference(BigInteger.valueOf(10));
 
         recordService.createRecord(recordRequest);
         List<RecordDto> allRecords = recordService.getAllRecords();

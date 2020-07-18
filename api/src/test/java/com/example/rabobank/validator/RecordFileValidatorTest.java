@@ -62,7 +62,7 @@ public class RecordFileValidatorTest {
         recordRequest1.setStartBalance(new BigDecimal(22.8));
         recordRequest1.setAccountNumber("tfry-reez-rty");
         recordRequest1.setDescription("description");
-        recordRequest1.setTransactionReference(BigInteger.valueOf(10));
+        recordRequest1.setReference(BigInteger.valueOf(10));
 
         RecordRequest recordRequest2 = new RecordRequest();
         recordRequest2.setEndBalance(new BigDecimal(3.2));
@@ -70,7 +70,7 @@ public class RecordFileValidatorTest {
         recordRequest2.setStartBalance(new BigDecimal(22.8));
         recordRequest2.setAccountNumber("tfry-reez-rty");
         recordRequest2.setDescription("description");
-        recordRequest2.setTransactionReference(BigInteger.valueOf(11));
+        recordRequest2.setReference(BigInteger.valueOf(11));
 
         RecordRequest recordRequest3 = new RecordRequest();
         recordRequest3.setEndBalance(new BigDecimal(3.2));
@@ -78,7 +78,7 @@ public class RecordFileValidatorTest {
         recordRequest3.setStartBalance(new BigDecimal(22.8));
         recordRequest3.setAccountNumber("tfry-reez-rty");
         recordRequest3.setDescription("description");
-        recordRequest3.setTransactionReference(BigInteger.valueOf(10));
+        recordRequest3.setReference(BigInteger.valueOf(10));
 
         return Arrays.asList(recordRequest1, recordRequest2, recordRequest3);
     }
@@ -91,7 +91,7 @@ public class RecordFileValidatorTest {
         recordRequest1.setStartBalance(new BigDecimal(22.8));
         recordRequest1.setAccountNumber("tfry-reez-rty");
         recordRequest1.setDescription("description");
-        recordRequest1.setTransactionReference(BigInteger.valueOf(10));
+        recordRequest1.setReference(BigInteger.valueOf(10));
 
         RecordRequest recordRequest2 = new RecordRequest();
         recordRequest2.setEndBalance(new BigDecimal(3.2));
@@ -99,7 +99,7 @@ public class RecordFileValidatorTest {
         recordRequest2.setStartBalance(new BigDecimal(22.8));
         recordRequest2.setAccountNumber("tfry-reez-rty");
         recordRequest2.setDescription("description");
-        recordRequest2.setTransactionReference(BigInteger.valueOf(11));
+        recordRequest2.setReference(BigInteger.valueOf(11));
 
         RecordRequest recordRequest3 = new RecordRequest();
         recordRequest3.setEndBalance(new BigDecimal(3.2));
@@ -107,7 +107,7 @@ public class RecordFileValidatorTest {
         recordRequest3.setStartBalance(new BigDecimal(22.8));
         recordRequest3.setAccountNumber("tfry-reez-rty");
         recordRequest3.setDescription("description");
-        recordRequest3.setTransactionReference(BigInteger.valueOf(13));
+        recordRequest3.setReference(BigInteger.valueOf(13));
 
         return Arrays.asList(recordRequest1, recordRequest2, recordRequest3);
     }

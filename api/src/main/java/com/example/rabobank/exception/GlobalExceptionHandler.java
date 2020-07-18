@@ -23,6 +23,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.resolve(ex.getBusinessErrorCode().getStatus()));
     }
 
+    @ExceptionHandler(TechnicalException.class)
+    public ResponseEntity<ErrorDto> handleTechnicalException(
+            TechnicalException ex) {
+
+        ErrorDto errorDto = buildErrorDtoFromTechnicalException(ex);
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ErrorDto buildErrorDtoFromTechnicalException(TechnicalException ex) {
+
+        ErrorDto dto = new ErrorDto();
+        dto.setMessage(environment.getProperty("error.technical.message"));
+        return dto;
+    }
+
     private ErrorDto buildErrorDtoFromBusinessException(BusinessException ex) {
         String errorCode = ex.getBusinessErrorCode().getErrorCode();
         String errorMessage = environment.getProperty(errorCode);

@@ -19,7 +19,7 @@ public class FileParserRecordRequest implements FileParser<RecordRequest>  {
             throw new BusinessException(BusinessErrorCode.RECORD_CSV_FILE_TOKEN_INCORRECT, line);
         }
         RecordRequest recordRequest = new RecordRequest();
-        recordRequest.setTransactionReference(BigInteger.valueOf(Long.parseLong(recordArray[0])));
+        recordRequest.setReference(BigInteger.valueOf(Long.parseLong(recordArray[0])));
         recordRequest.setAccountNumber(recordArray[1]);
         recordRequest.setDescription(recordArray[2]);
         recordRequest.setStartBalance(BigDecimal.valueOf(Double.parseDouble(recordArray[3])));
