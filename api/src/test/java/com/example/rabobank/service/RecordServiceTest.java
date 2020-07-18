@@ -24,7 +24,10 @@ public class RecordServiceTest {
     private RecordService recordService;
 
     @Value("classpath:file/records.csv")
-    Resource resourceFile;
+    Resource csvResourceFile;
+
+    @Value("classpath:file/records.xml")
+    Resource xmlResourceFile;
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
@@ -44,9 +47,20 @@ public class RecordServiceTest {
     }
 
     @Test
-    public void shouldImportRecord() throws IOException {
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    public void shouldImportCsvRecord() throws IOException {
 
-        MultipartFile file =new MockMultipartFile("file", "records.csv", "multipart/form" ,resourceFile.getInputStream());
+        MultipartFile file =new MockMultipartFile("file", "records.csv", "multipart/form" , csvResourceFile.getInputStream());
+        recordService.importRecords(file);
+        List<RecordDto> allRecords = recordService.getAllRecords();
+        Assertions.assertEquals(10, allRecords.size());
+    }
+
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    public void shouldImportXmlRecord() throws IOException {
+
+        MultipartFile file =new MockMultipartFile("file", "records.xml", "multipart/form" , xmlResourceFile.getInputStream());
         recordService.importRecords(file);
         List<RecordDto> allRecords = recordService.getAllRecords();
         Assertions.assertEquals(10, allRecords.size());
