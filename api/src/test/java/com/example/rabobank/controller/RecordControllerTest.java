@@ -34,7 +34,6 @@ public class RecordControllerTest {
     @Test
     public void shouldImportRecord() throws Exception {
         MockMultipartFile recordFile =new MockMultipartFile("file", "records.csv", "multipart/form" ,resourceFile.getInputStream());
-        doNothing().when(recordService).importRecords(any());
         mockMvc.perform(MockMvcRequestBuilders.multipart("/records")
                .file(recordFile))
                .andExpect(status().is(200));

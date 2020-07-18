@@ -3,12 +3,13 @@ package com.example.rabobank.mapper;
 import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
 import com.example.rabobank.entity.RecordEntity;
+import com.example.rabobank.entity.WorkFlowExecutionEntity;
 
 import java.time.LocalDate;
 
 public class RecordMapper {
 
-    public static RecordEntity buildEntityFromRecordRequest(RecordRequest recordRequest){
+    public static RecordEntity buildEntityFromRecordRequest(RecordRequest recordRequest, WorkFlowExecutionEntity executionEntity){
         RecordEntity entity = new RecordEntity();
         entity.setAccountNumber(recordRequest.getAccountNumber());
         entity.setDescription(recordRequest.getDescription());
@@ -17,6 +18,7 @@ public class RecordMapper {
         entity.setMutation(recordRequest.getMutation());
         entity.setTransactionReference(recordRequest.getReference());
         entity.setDateCreation(LocalDate.now());
+        entity.setWorkFlowExecution(executionEntity);
         return entity;
     }
 

@@ -2,6 +2,7 @@ package com.example.rabobank.controller;
 
 
 import com.example.rabobank.config.Swagger;
+import com.example.rabobank.domain.ImportRecordsResponse;
 import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
 import com.example.rabobank.exception.BusinessErrorCode;
@@ -50,10 +51,10 @@ public class RecordController {
     @Swagger
     @ApiOperation("import records ")
     @PostMapping("/records")
-    public void importRecords(@RequestParam("file") MultipartFile recordFile) throws IOException {
+    public ResponseEntity<ImportRecordsResponse> importRecords(@RequestParam("file") MultipartFile recordFile) throws IOException {
 
         logger.info("****** import record file");
-        recordService.importRecords(recordFile);
+        return ResponseEntity.ok(recordService.importRecords(recordFile));
     }
 
 }

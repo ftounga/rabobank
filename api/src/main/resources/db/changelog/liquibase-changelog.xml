@@ -5,6 +5,28 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet author="Franck" id="1">
+        <createTable tableName="workflow_execution">
+            <column name="id" type="INTEGER"
+                    autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="public_id" type="VARCHAR(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_creation" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Franck" id="2">
+        <addPrimaryKey tableName="workflow_execution"
+                       constraintName="id_workflow_pk" columnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Franck" id="3">
         <createTable tableName="record">
             <column name="id" type="INTEGER"
                     autoIncrement="true">
@@ -31,23 +53,32 @@
             <column name="mutation" type="NUMERIC">
                 <constraints nullable="false"/>
             </column>
+            <column name="id_workflow" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
             <column name="date_creation" type="DATE">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Franck" id="2">
+    <changeSet author="Franck" id="4">
+        <addForeignKeyConstraint
+                baseTableName="record" constraintName="record_workflow_fk"
+                baseColumnNames="id_workflow" referencedTableName="workflow_execution"
+                referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet author="Franck" id="5">
         <addPrimaryKey tableName="record"
-                       constraintName="id_pk" columnNames="id"/>
+                       constraintName="id_record_pk" columnNames="id"/>
     </changeSet>
 
-    <changeSet  author="Franck"  id="3">
+    <changeSet  author="Franck"  id="6">
         <addUniqueConstraint  columnNames="transaction_reference"
                               constraintName="const_ref"
                               tableName="record"/>
     </changeSet>
 
-    <changeSet author="Franck" id="4">
+    <changeSet author="Franck" id="7">
         <sqlFile path="init-db.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>

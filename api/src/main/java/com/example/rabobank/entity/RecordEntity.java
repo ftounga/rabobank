@@ -41,4 +41,8 @@ public class RecordEntity {
 
     @Column
     private LocalDate dateCreation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_workflow", nullable = false)
+    private WorkFlowExecutionEntity workFlowExecution;
 }

@@ -1,5 +1,6 @@
 package com.example.rabobank.service;
 
+import com.example.rabobank.domain.ImportRecordsResponse;
 import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,5 +14,5 @@ public interface RecordService {
 
     RecordDto createRecord(RecordRequest recordRequest);
 
-    void importRecords(MultipartFile recordFile) throws IOException;
+    ImportRecordsResponse importRecords(MultipartFile recordFile) throws IOException;
 }

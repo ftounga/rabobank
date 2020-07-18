@@ -1,0 +1,10 @@
+package com.example.rabobank.service;
+
+import com.example.rabobank.domain.dto.WorkFlowExecutionDto;
+
+import java.util.List;
+
+public interface WorkflowExecutionService {
+
+    List<WorkFlowExecutionDto> getAllWorkflowExecutionDto();
+}
