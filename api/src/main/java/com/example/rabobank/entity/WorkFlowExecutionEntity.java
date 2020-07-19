@@ -38,4 +38,8 @@ public class WorkFlowExecutionEntity {
     @OneToMany(mappedBy = "workFlowExecution", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<RecordEntity> records = new ArrayList<>();
+
+    @OneToMany(mappedBy = "workFlowExecution", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<FailedRecordEntity> failedRecords = new ArrayList<>();
 }
