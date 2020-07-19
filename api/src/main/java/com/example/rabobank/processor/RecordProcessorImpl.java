@@ -10,11 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
@@ -22,10 +19,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,12 +40,11 @@ public class RecordProcessorImpl implements RecordProcessor {
 
     @Override
     public Stream<RecordRequest> processRecordXmlFile(byte[] recordBuffer) {
-        String recordXsdPath;
+        InputStream recordXsdStream;
         Schema schema;
 
-        InputStream inputStream = new ByteArrayInputStream(recordBuffer);
-        recordXsdPath = getRecordXsdPath();
-        schema = getSchemaFromXsdPath(recordXsdPath);
+        recordXsdStream = getRecordXsdStream();
+        schema = getSchemaFromXsdPath(recordXsdStream);
         Validator validator = schema.newValidator();
         validateRecordXmlFile(recordBuffer, validator);
         RecordsList recordsList = parseXMLRecordsList(recordBuffer);
@@ -83,27 +77,27 @@ public class RecordProcessorImpl implements RecordProcessor {
         }
     }
 
-    private Schema getSchemaFromXsdPath(String recordXsdPath) {
+    private Schema getSchemaFromXsdPath(InputStream recordXsdStream) {
 
         Schema schema;
         try {
-            schema = schemaFactory.newSchema(new File(recordXsdPath));
+            schema = schemaFactory.newSchema(new StreamSource(recordXsdStream));
         }catch (SAXException ex){
-            logger.error("Cannot create schema to validate xsd file");
+            logger.error("Cannot create schema to validate xsd file from: " +recordXsdStream);
             throw new TechnicalException(ex, BusinessErrorCode.TECHNICAL_ERROR);
         }
         return schema;
     }
 
-    private String getRecordXsdPath() {
-        String recordXsdPath;
+    private InputStream getRecordXsdStream() {
+        InputStream recordXsdStream;
         try {
-            recordXsdPath = getResource("records.xsd");
+            recordXsdStream = getSchemaRecordXsdStream();
         }catch (FileNotFoundException ex){
             logger.error("records xsd not found");
             throw new TechnicalException(ex, BusinessErrorCode.TECHNICAL_ERROR);
         }
-        return recordXsdPath;
+        return recordXsdStream;
     }
 
     @Override
@@ -118,10 +112,7 @@ public class RecordProcessorImpl implements RecordProcessor {
         return recordRequests.stream();
     }
 
-    private String getResource(String filename) throws FileNotFoundException {
-        URL resource = getClass().getClassLoader().getResource(filename);
-        Objects.requireNonNull(resource);
-
-        return resource.getFile();
+    private InputStream getSchemaRecordXsdStream() throws FileNotFoundException {
+        return getClass().getClassLoader().getResourceAsStream("schema/records.xsd");
     }
 }

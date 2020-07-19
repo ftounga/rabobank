@@ -56,7 +56,7 @@
             <column name="mutation" type="NUMERIC">
                 <constraints nullable="false"/>
             </column>
-            <column name="id_workflow" type="NUMERIC">
+            <column name="id_workflow" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
             <column name="date_creation" type="DATE">
