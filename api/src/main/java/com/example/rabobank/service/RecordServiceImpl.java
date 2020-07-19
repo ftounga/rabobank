@@ -14,18 +14,23 @@ import com.example.rabobank.processor.RecordProcessor;
 import com.example.rabobank.repository.RecordRepository;
 import com.example.rabobank.repository.WorkflowExecutionRepository;
 import com.example.rabobank.util.FileUtil;
+import com.example.rabobank.util.WorkflowExecutionHelper;
 import com.example.rabobank.validator.RecordFileValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,43 +67,56 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public ImportRecordsResponse importRecords(MultipartFile recordFile) throws IOException {
+    public ImportRecordsResponse importRecords(byte[] recordBuffer, String originalName) throws IOException {
         logger.info("****** import records file");
-        validateFileName(recordFile);
-        InputStream recordStream = recordFile.getInputStream();
-        FileExtension fileExtension = FileUtil.getFileExtension(recordFile);
-        Stream<RecordRequest> recordRequestStream = null;
-        if(fileExtension ==  FileExtension.CSV){
-            recordRequestStream = recordProcessor.processRecordCsvFile(recordStream);
-        } else if(fileExtension ==  FileExtension.XML){
-            recordRequestStream = recordProcessor.processRecordXmlFile(recordFile);
-        }
+        Stream<RecordRequest> recordRequestStream = importRecordProcessStream(recordBuffer, originalName);
         WorkFlowExecutionEntity workFlowExecution =  new WorkFlowExecutionEntity();
         workFlowExecution.setDateCreation(LocalDate.now());
         workFlowExecution.setStatus(RecordImportStatus.SUCCEED);
+        workFlowExecution.setFileExtension(FileUtil.getFileExtension(originalName));
         List<RecordEntity> recordsEntity = recordRequestStream
                 .map(recordRequest -> RecordMapper.buildEntityFromRecordRequest(recordRequest, workFlowExecution))
                 .collect(Collectors.toList());
         workFlowExecution.setRecords(recordsEntity);
         WorkFlowExecutionEntity savedWorkFlowExec = workflowExecutionRepository.save(workFlowExecution);
-        return buildImportResponseFromWorkflow(savedWorkFlowExec);
+        return WorkflowExecutionHelper.buildImportResponseFromWorkflow(savedWorkFlowExec);
     }
 
-    private ImportRecordsResponse buildImportResponseFromWorkflow(WorkFlowExecutionEntity executionEntity) {
-        ImportRecordsResponse response = new ImportRecordsResponse();
-        response.setRecordsNumbers(executionEntity.getRecords().size());
-        response.setStatus(executionEntity.getStatus());
-        response.setImportWorkFlowPublicId(executionEntity.getPublicId());
-        return  response;
+    @Async("threadPoolTaskRecordExecutor")
+    @Override
+    public void importRecordsAsync(byte[] recordBuffer, WorkFlowExecutionEntity executionEntity, String originalName) throws IOException {
+        logger.info("****** import async records file");
+
+        Stream<RecordRequest> recordRequestStream = importRecordProcessStream(recordBuffer, originalName);
+        List<RecordEntity> recordsEntity = recordRequestStream
+                .map(recordRequest -> RecordMapper.buildEntityFromRecordRequest(recordRequest, executionEntity))
+                .collect(Collectors.toList());
+        executionEntity.setRecords(recordsEntity);
+        executionEntity.setStatus(RecordImportStatus.SUCCEED);
+        executionEntity.setFileExtension(FileUtil.getFileExtension(originalName));
+        workflowExecutionRepository.save(executionEntity);
     }
 
-    private void validateFileName(MultipartFile recordFile) {
+    private void validateFileName(String originalName) {
         logger.info("****** validate file name");
-        if(!RecordFileValidator.isRecordFileNameFormatValid(recordFile)){
-            throw new BusinessException(BusinessErrorCode.RECORD_FORMAT_FILE_NAME_INCORRECT, recordFile.getOriginalFilename());
+        if(!RecordFileValidator.isRecordFileNameFormatValid(originalName)){
+            throw new BusinessException(BusinessErrorCode.RECORD_FORMAT_FILE_NAME_INCORRECT, originalName);
         }
-        if(!RecordFileValidator.isRecordFileExtensionValid(recordFile)){
-            throw new BusinessException(BusinessErrorCode.RECORD_EXTENSION_FILE_NAME_INCORRECT, recordFile.getOriginalFilename());
+        if(!RecordFileValidator.isRecordFileExtensionValid(originalName)){
+            throw new BusinessException(BusinessErrorCode.RECORD_EXTENSION_FILE_NAME_INCORRECT, originalName);
         }
+    }
+
+    private Stream<RecordRequest> importRecordProcessStream(byte[] recordBuffer, String originalName) throws IOException {
+        validateFileName(originalName);
+        InputStream recordStream = new ByteArrayInputStream(recordBuffer);
+        FileExtension fileExtension = FileUtil.getFileExtension(originalName);
+        Stream<RecordRequest> recordRequestStream = null;
+        if(fileExtension ==  FileExtension.CSV){
+            recordRequestStream = recordProcessor.processRecordCsvFile(recordStream);
+        } else if(fileExtension ==  FileExtension.XML){
+            recordRequestStream = recordProcessor.processRecordXmlFile(recordBuffer);
+        }
+        return recordRequestStream;
     }
 }

@@ -11,6 +11,7 @@ public class WorkFlowExecutionMapper {
         dto.setPublicId(executionEntity.getPublicId());
         dto.setRecordNumbers(executionEntity.getRecords().size());
         dto.setStatus(executionEntity.getStatus());
+        dto.setFileExtension(executionEntity.getFileExtension());
         return dto;
     }
 }

@@ -44,22 +44,24 @@ public class RecordProcessorImpl implements RecordProcessor {
     private SchemaFactory schemaFactory;
 
     @Override
-    public Stream<RecordRequest> processRecordXmlFile(MultipartFile inputFile) throws IOException {
+    public Stream<RecordRequest> processRecordXmlFile(byte[] recordBuffer) {
         String recordXsdPath;
         Schema schema;
 
+        InputStream inputStream = new ByteArrayInputStream(recordBuffer);
         recordXsdPath = getRecordXsdPath();
         schema = getSchemaFromXsdPath(recordXsdPath);
         Validator validator = schema.newValidator();
-        validateRecordXmlFile(inputFile.getInputStream(), validator);
-        RecordsList recordsList = parseXMLRecordsList(inputFile.getInputStream());
+        validateRecordXmlFile(recordBuffer, validator);
+        RecordsList recordsList = parseXMLRecordsList(recordBuffer);
         RecordFileValidator.validateNoDuplicatetransactionReference(recordsList.getRecords());
 
         return recordsList.getRecords().stream();
     }
 
-    private RecordsList parseXMLRecordsList(InputStream inputStream) {
+    private RecordsList parseXMLRecordsList(byte[] recordBuffer) {
         RecordsList recordsList;
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(recordBuffer);
         try {
             recordsList = (RecordsList) recordsUnmarshaller.unmarshal(inputStream);
         }catch (JAXBException ex){
@@ -69,7 +71,8 @@ public class RecordProcessorImpl implements RecordProcessor {
         return recordsList;
     }
 
-    private void validateRecordXmlFile(InputStream inputStream, Validator validator) {
+    private void validateRecordXmlFile(byte[] recordBuffer, Validator validator) {
+        InputStream inputStream = new ByteArrayInputStream(recordBuffer);
         try {
             validator.validate(new StreamSource(inputStream));
         }catch (IOException ex){

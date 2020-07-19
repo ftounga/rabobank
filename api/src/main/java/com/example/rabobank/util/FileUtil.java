@@ -5,8 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class FileUtil {
 
-    public static FileExtension getFileExtension(MultipartFile recordFile){
-        String extension = recordFile.getOriginalFilename().split("\\.")[1];
+    public static FileExtension getFileExtension(String originalName){
+        String extension = originalName.split("\\.")[1];
         return FileExtension.fromExtension(extension);
     }
 }

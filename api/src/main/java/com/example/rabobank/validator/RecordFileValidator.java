@@ -13,15 +13,15 @@ import java.util.Set;
 
 public class RecordFileValidator {
 
-    public static boolean isRecordFileExtensionValid(MultipartFile recordFile){
+    public static boolean isRecordFileExtensionValid(String originalName){
         List<String> allowedExtensions = Arrays.asList("csv","xml");
-        String extension = recordFile.getOriginalFilename().split("\\.")[1];
+        String extension = originalName.split("\\.")[1];
         return allowedExtensions.contains(extension);
     }
 
-    public static boolean isRecordFileNameFormatValid(MultipartFile recordFile){
-        String[] originalName = recordFile.getOriginalFilename().split("\\.");
-        return originalName.length == 2;
+    public static boolean isRecordFileNameFormatValid(String originalName){
+        String[] nameArray = originalName.split("\\.");
+        return nameArray.length == 2;
     }
 
     public static void validateNoDuplicatetransactionReference(List<RecordRequest> recordRequests){

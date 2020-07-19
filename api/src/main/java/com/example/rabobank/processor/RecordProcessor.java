@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public interface RecordProcessor {
 
-    Stream<RecordRequest> processRecordXmlFile(MultipartFile inputFile) throws IOException;
+    Stream<RecordRequest> processRecordXmlFile(byte[] recordBuffer) throws IOException;
 
     Stream<RecordRequest> processRecordCsvFile(InputStream inputStream);
 }

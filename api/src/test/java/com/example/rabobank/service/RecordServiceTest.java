@@ -3,6 +3,7 @@ package com.example.rabobank.service;
 import com.example.rabobank.RaboBankIntegrationTest;
 import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,8 @@ public class RecordServiceTest {
     public void shouldImportCsvRecord() throws IOException {
 
         MultipartFile file =new MockMultipartFile("file", "records.csv", "multipart/form" , csvResourceFile.getInputStream());
-        recordService.importRecords(file);
+        byte[] recordBuffer = IOUtils.toByteArray(file.getInputStream());
+        recordService.importRecords(recordBuffer, file.getOriginalFilename());
         List<RecordDto> allRecords = recordService.getAllRecords();
         Assertions.assertEquals(10, allRecords.size());
     }
@@ -61,7 +63,8 @@ public class RecordServiceTest {
     public void shouldImportXmlRecord() throws IOException {
 
         MultipartFile file =new MockMultipartFile("file", "records.xml", "multipart/form" , xmlResourceFile.getInputStream());
-        recordService.importRecords(file);
+        byte[] recordBuffer = IOUtils.toByteArray(file.getInputStream());
+        recordService.importRecords(recordBuffer, file.getOriginalFilename());
         List<RecordDto> allRecords = recordService.getAllRecords();
         Assertions.assertEquals(10, allRecords.size());
     }

@@ -5,10 +5,12 @@ import com.example.rabobank.config.Swagger;
 import com.example.rabobank.domain.ImportRecordsResponse;
 import com.example.rabobank.domain.dto.RecordDto;
 import com.example.rabobank.domain.request.RecordRequest;
-import com.example.rabobank.exception.BusinessErrorCode;
-import com.example.rabobank.exception.BusinessException;
+import com.example.rabobank.entity.WorkFlowExecutionEntity;
 import com.example.rabobank.service.RecordService;
+import com.example.rabobank.service.WorkflowExecutionService;
+import com.example.rabobank.util.WorkflowExecutionHelper;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class RecordController {
 
     @Autowired
     private RecordService recordService;
+
+    @Autowired
+    private WorkflowExecutionService executionService;
 
     @Swagger
     @ApiOperation("Get all records ")
@@ -54,7 +59,21 @@ public class RecordController {
     public ResponseEntity<ImportRecordsResponse> importRecords(@RequestParam("file") MultipartFile recordFile) throws IOException {
 
         logger.info("****** import record file");
-        return ResponseEntity.ok(recordService.importRecords(recordFile));
+        byte[] recordBuffer = IOUtils.toByteArray(recordFile.getInputStream());
+        return ResponseEntity.ok(recordService.importRecords(recordBuffer, recordFile.getOriginalFilename()));
+    }
+
+    @Swagger
+    @ApiOperation("import records asynchronously")
+    @PostMapping("/async-records")
+    public ResponseEntity<ImportRecordsResponse> importRecordsAsync(@RequestParam("file") MultipartFile recordFile) throws IOException {
+
+        logger.info("****** import record file asynchronously");
+        WorkFlowExecutionEntity workFlowExecution = executionService.createWorkFlowExecution();
+        byte[] recordBuffer = IOUtils.toByteArray(recordFile.getInputStream());
+        recordService.importRecordsAsync(recordBuffer, workFlowExecution, recordFile.getOriginalFilename());
+
+        return ResponseEntity.ok(WorkflowExecutionHelper.buildImportResponseFromWorkflow(workFlowExecution));
     }
 
 }

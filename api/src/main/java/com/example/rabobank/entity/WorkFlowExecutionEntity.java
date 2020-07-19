@@ -1,12 +1,15 @@
 package com.example.rabobank.entity;
 
 
+import com.example.rabobank.converter.FileExtensionConverter;
 import com.example.rabobank.converter.RecordImportStatusConverter;
+import com.example.rabobank.enumeration.FileExtension;
 import com.example.rabobank.enumeration.RecordImportStatus;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +32,10 @@ public class WorkFlowExecutionEntity {
     @Convert(converter = RecordImportStatusConverter.class)
     private RecordImportStatus status;
 
+    @Convert(converter = FileExtensionConverter.class)
+    private FileExtension fileExtension;
+
     @OneToMany(mappedBy = "workFlowExecution", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    private List<RecordEntity> records;
+    private List<RecordEntity> records = new ArrayList<>();
 }

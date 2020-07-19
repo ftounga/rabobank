@@ -43,7 +43,7 @@ public class RecordControllerTest {
     public void shouldNotImportRecord() throws Exception {
         MockMultipartFile recordFile =new MockMultipartFile("file", "records.csv", "multipart/form" ,resourceFile.getInputStream());
         BusinessException businessException = new BusinessException(BusinessErrorCode.REFERENCE_TRANSACTION_ALREADY_EXIST, "5678");
-        doThrow(businessException).when(recordService).importRecords(any());
+        doThrow(businessException).when(recordService).importRecords(any(), any());
         mockMvc.perform(MockMvcRequestBuilders.multipart("/records")
                 .file(recordFile))
                 .andExpect(status().is(400));

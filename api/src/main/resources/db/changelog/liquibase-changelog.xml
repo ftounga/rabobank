@@ -16,6 +16,9 @@
             <column name="status" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="file_extension" type="VARCHAR(50)">
+                <constraints nullable="true"/>
+            </column>
             <column name="date_creation" type="DATE">
                 <constraints nullable="false"/>
             </column>

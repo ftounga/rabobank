@@ -1,5 +1,6 @@
 package com.example.rabobank.domain.dto;
 
+import com.example.rabobank.enumeration.FileExtension;
 import com.example.rabobank.enumeration.RecordImportStatus;
 import lombok.Data;
 
@@ -14,6 +15,8 @@ public class WorkFlowExecutionDto {
     private LocalDate dateCreation;
 
     private RecordImportStatus status;
+
+    private FileExtension fileExtension;
 
     private Integer recordNumbers;
 }

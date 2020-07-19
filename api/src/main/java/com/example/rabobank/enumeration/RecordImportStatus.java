@@ -4,7 +4,7 @@ public enum RecordImportStatus {
 
     SUCCEED("SUCCEED"),
     FAILED("FAILED"),
-    PENDING("FAILED");
+    PENDING("PENDING");
 
     private String value;
 

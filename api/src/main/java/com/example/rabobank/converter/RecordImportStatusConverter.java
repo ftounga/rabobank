@@ -9,13 +9,14 @@ import static java.util.Objects.nonNull;
 
 @Converter
 public class RecordImportStatusConverter implements AttributeConverter<RecordImportStatus, String> {
+
     @Override
-    public String convertToDatabaseColumn(RecordImportStatus messageObject) {
-        return nonNull(messageObject) ? messageObject.getValue() : null;
+    public String convertToDatabaseColumn(RecordImportStatus status) {
+        return nonNull(status) ? status.getValue() : null;
     }
 
     @Override
-    public RecordImportStatus convertToEntityAttribute(String object) {
-        return nonNull(object) ? RecordImportStatus.fromValue(object) : null;
+    public RecordImportStatus convertToEntityAttribute(String status) {
+        return nonNull(status) ? RecordImportStatus.fromValue(status) : null;
     }
 }

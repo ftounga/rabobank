@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class RecordFileValidatorTest {
 
@@ -19,7 +20,7 @@ public class RecordFileValidatorTest {
     public void shouldNotValidateExtensionFile(){
         MultipartFile file =new MockMultipartFile("file", "test.txt", "multipart/form" ,new byte[0]);
 
-        boolean isExtensionValid = RecordFileValidator.isRecordFileExtensionValid(file);
+        boolean isExtensionValid = RecordFileValidator.isRecordFileExtensionValid(Objects.requireNonNull(file.getOriginalFilename()));
         Assertions.assertEquals(false, isExtensionValid);
     }
 
@@ -27,7 +28,7 @@ public class RecordFileValidatorTest {
     public void shouldValidateCsvExtensionFile(){
         MultipartFile file =new MockMultipartFile("file", "test.csv", "multipart/form" ,new byte[0]);
 
-        boolean isExtensionValid = RecordFileValidator.isRecordFileExtensionValid(file);
+        boolean isExtensionValid = RecordFileValidator.isRecordFileExtensionValid(Objects.requireNonNull(file.getOriginalFilename()));
         Assertions.assertEquals(true, isExtensionValid);
     }
 
@@ -35,7 +36,7 @@ public class RecordFileValidatorTest {
     public void shouldValidateXmlExtensionFile(){
         MultipartFile file =new MockMultipartFile("file", "test.xml", "multipart/form" ,new byte[0]);
 
-        boolean isExtensionValid = RecordFileValidator.isRecordFileExtensionValid(file);
+        boolean isExtensionValid = RecordFileValidator.isRecordFileExtensionValid(Objects.requireNonNull(file.getOriginalFilename()));
         Assertions.assertEquals(true, isExtensionValid);
     }
 
